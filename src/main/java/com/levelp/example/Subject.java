@@ -1,6 +1,7 @@
 package com.levelp.example;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "subjects")
@@ -8,6 +9,11 @@ public class Subject {
     @Id
     @GeneratedValue
     private long id;
+
+    @Column
+    //@Enumerated(EnumType.STRING)
+    @Convert(converter = SubjKindConverter.class)
+    private SubjKind kind;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Engineer engineer;
@@ -21,12 +27,24 @@ public class Subject {
     @Column(unique = true, nullable = false, length = 500)
     private String address;
 
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastModificationTime;
+
     public Subject() {
     }
 
     public Subject(String cadNum, String address) {
         this.cadNum = cadNum;
         this.address = address;
+    }
+
+    public SubjKind getKind() {
+        return kind;
+    }
+
+    public void setKind(SubjKind kind) {
+        this.kind = kind;
     }
 
     public String getCadNum() {
@@ -67,5 +85,13 @@ public class Subject {
 
     public void setEngineer(Engineer engineer) {
         this.engineer = engineer;
+    }
+
+    public Date getLastModificationTime() {
+        return lastModificationTime;
+    }
+
+    public void setLastModificationTime(Date lastModificationTime) {
+        this.lastModificationTime = lastModificationTime;
     }
 }
