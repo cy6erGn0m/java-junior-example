@@ -57,7 +57,7 @@ public class UsersDAOTest {
     }
 
     @Test
-//    @Ignore
+    @Ignore
     public void refreshRemoved() {
         em.getTransaction().begin();
         Engineer engineer = dao.createEngineer("engineer1");
