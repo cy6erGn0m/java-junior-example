@@ -4,14 +4,22 @@ import com.levelp.example.User;
 import com.levelp.example.UsersDAO;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
+import java.util.Date;
 import java.util.List;
 
 public class TestBean {
     private EntityManager em;
     private UsersDAO users;
 
-    public void setup(EntityManager em) {
+    public Date getCurrentDate() {
+        return new Date();
+    }
+
+    public EntityManager getEntityManager() {
+        return em;
+    }
+
+    public void setEntityManager(EntityManager em) {
         this.em = em;
         this.users = new UsersDAO(em);
     }
