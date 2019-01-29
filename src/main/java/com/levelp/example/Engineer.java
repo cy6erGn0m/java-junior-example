@@ -6,7 +6,14 @@ import java.util.List;
 @Entity
 @DiscriminatorValue("En")
 public class Engineer extends User {
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY,
+//            cascade = { CascadeType.PERSIST, CascadeType.REMOVE },
+            mappedBy = "engineer")
+//    @JoinTable(
+//            name = "engineers_subjects_map",
+//            joinColumns = @JoinColumn(name = "engineer_fk", referencedColumnName = "id"),
+//            inverseJoinColumns = @JoinColumn(name = "subject_fk", referencedColumnName = "id")
+//    )
     private List<Subject> subjects;
 
     public Engineer() {

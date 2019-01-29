@@ -4,7 +4,15 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "subjects")
+@Table(
+        name = "subjects",
+        indexes = {
+                @Index(
+                        name = "address_index",
+                        columnList = "address"
+                )
+        }
+)
 public class Subject {
     @Id
     @GeneratedValue
@@ -16,6 +24,7 @@ public class Subject {
     private SubjKind kind;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "engineer_fk")
     private Engineer engineer;
 
     @Column(unique = true, nullable = false)
@@ -24,7 +33,7 @@ public class Subject {
     @Column
     private String title;
 
-    @Column(unique = true, nullable = false, length = 500)
+    @Column(nullable = false, length = 500)
     private String address;
 
     @Column
