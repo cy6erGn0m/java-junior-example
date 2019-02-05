@@ -1,15 +1,19 @@
 package com.levelp.example;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import javax.persistence.EntityManager;
 
 import java.util.List;
 
 import static com.levelp.example.User.FIND_BY_LOGIN_QUERY;
 
+@Service
 public class UsersDAO {
-    private EntityManager em;
+    private final EntityManager em;
 
-    public UsersDAO(EntityManager em) {
+    public UsersDAO(@Autowired EntityManager em) {
         this.em = em;
     }
 
@@ -17,6 +21,28 @@ public class UsersDAO {
         Engineer engineer = new Engineer(login);
         em.persist(engineer);
         return engineer;
+    }
+
+    public User createUser(String kind, String login) {
+        User user;
+
+        switch (kind) {
+            case "admin":
+                user = new Admin(login);
+                break;
+            case "client":
+                user = new Client(login);
+                break;
+            case "engineer":
+                user = new Engineer(login);
+                break;
+            default:
+                return null;
+        }
+
+        em.persist(user);
+
+        return user;
     }
 
     public User findUser(String login) {
