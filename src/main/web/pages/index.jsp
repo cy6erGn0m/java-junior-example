@@ -25,5 +25,8 @@
     <p>
         <a href="add-user">Add user...</a>
     </p>
+    <p>
+        <a href="add-subject">Add subj...</a>
+    </p>
 </body>
 </html>
