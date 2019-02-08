@@ -3,38 +3,27 @@ package com.levep.example;
 import com.levelp.example.Engineer;
 import com.levelp.example.User;
 import com.levelp.example.UsersDAO;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 import static org.junit.Assert.*;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = TestConfiguration.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class UsersDAOTest {
-    private EntityManagerFactory factory;
+    @Autowired
     private EntityManager em;
+
+    @Autowired
     private UsersDAO dao;
-
-    @Before
-    public void setup() {
-        factory = Persistence.createEntityManagerFactory("TestPersistenceUnit");
-        em = factory.createEntityManager();
-        dao = new UsersDAO(em);
-    }
-
-    @After
-    public void stop() {
-        if (em != null) {
-            em.close();
-        }
-        if (factory != null) {
-            factory.close();
-        }
-    }
 
     @Test
     public void testCreateEngineer() {

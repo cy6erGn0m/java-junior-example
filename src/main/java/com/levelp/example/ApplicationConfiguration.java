@@ -19,7 +19,7 @@ import javax.persistence.Persistence;
 public class ApplicationConfiguration extends WebMvcConfigurerAdapter {
     @Bean
     public EntityManagerFactory createEntityManagerFactory() {
-        return Persistence.createEntityManagerFactory("TestPersistenceUnit");
+        return Persistence.createEntityManagerFactory("ProdPersistenceUnit");
     }
 
     @Bean

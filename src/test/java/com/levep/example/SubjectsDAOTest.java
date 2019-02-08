@@ -1,44 +1,31 @@
 package com.levep.example;
 
 import com.levelp.example.*;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
+import static org.junit.Assert.*;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = TestConfiguration.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class SubjectsDAOTest {
-    private EntityManagerFactory factory;
+    @Autowired
     private EntityManager em;
+
+    @Autowired
     private UsersDAO users;
+
+    @Autowired
     private SubjectsDAO subjects;
-
-    @Before
-    public void setup() {
-        factory = Persistence.createEntityManagerFactory("TestPersistenceUnit");
-        em = factory.createEntityManager();
-        users = new UsersDAO(em);
-        subjects = new SubjectsDAO(em);
-    }
-
-    @After
-    public void stop() {
-        if (em != null) {
-            em.close();
-        }
-        if (factory != null) {
-            factory.close();
-        }
-    }
 
     @Test
     public void testCreateSubj() {
