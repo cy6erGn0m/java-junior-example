@@ -8,23 +8,22 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping(path = "/add-user")
-public class AddUserController {
+public class UserController {
     private final UsersDAO users;
 
     @Autowired
-    public AddUserController(UsersDAO users) {
+    public UserController(UsersDAO users) {
         this.users = users;
     }
 
-    @GetMapping
+    @GetMapping(path = "/add-user")
     public String addUserForm(ModelMap modelMap) {
         AddUserPageBean bean = new AddUserPageBean("admin", "", "");
         modelMap.addAttribute("bean", bean);
         return "add-user";
     }
 
-    @PostMapping
+    @PostMapping(path = "/add-user")
     @Transactional
     public String postAddUserForm(@RequestParam String kind,
                                   @RequestParam String login,
@@ -44,6 +43,12 @@ public class AddUserController {
             return "add-user";
         }
 
+        return "redirect:/";
+    }
+
+    @PostMapping(path = "/delete-user")
+    public String delete(@RequestParam long id) {
+        users.delete(id);
         return "redirect:/";
     }
 }

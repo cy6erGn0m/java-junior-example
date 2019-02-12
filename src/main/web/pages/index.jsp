@@ -17,6 +17,12 @@
             <tr>
                 <td>${user.id}</td>
                 <td>${user.login}</td>
+                <td>
+                    <form action="/delete-user" method="post">
+                        <input type="hidden" name="id" value="${user.id}">
+                        <input type="submit" value="Delete">
+                    </form>
+                </td>
             </tr>
         </c:forEach>
         </tbody>

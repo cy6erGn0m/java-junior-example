@@ -1,10 +1,10 @@
 package com.levelp.example;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 
 import java.util.List;
@@ -57,5 +57,11 @@ public class UsersDAO {
 
     public List<User> listUsers() {
         return em.createQuery("from User", User.class).getResultList();
+    }
+
+    public void delete(long id) {
+        User user = em.find(User.class, id);
+        if (user == null) throw new EntityNotFoundException("User with id " + id + " is not found");
+        em.remove(user);
     }
 }
