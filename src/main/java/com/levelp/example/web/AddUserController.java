@@ -3,33 +3,29 @@ package com.levelp.example.web;
 import com.levelp.example.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.persistence.EntityManager;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping(path = "/add-user")
 public class AddUserController {
-    private final EntityManager em;
     private final UsersDAO users;
 
     @Autowired
-    public AddUserController(EntityManager em, UsersDAO users) {
-        this.em = em;
+    public AddUserController(UsersDAO users) {
         this.users = users;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public String addUserForm(ModelMap modelMap) {
         AddUserPageBean bean = new AddUserPageBean("admin", "", "");
         modelMap.addAttribute("bean", bean);
         return "add-user";
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping
+    @Transactional
     public String postAddUserForm(@RequestParam String kind,
                                   @RequestParam String login,
                                   ModelMap model) {
@@ -43,16 +39,9 @@ public class AddUserController {
             return "add-user";
         }
 
-        em.getTransaction().begin();
-        try {
-            if (users.createUser(kind, login) == null) {
-                // TODO error message
-                return "add-user";
-            }
-            em.getTransaction().commit();
-        } catch (Throwable t) {
-            em.getTransaction().rollback();
-            throw t;
+        if (users.createUser(kind, login) == null) {
+            // TODO error message
+            return "add-user";
         }
 
         return "redirect:/";

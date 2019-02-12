@@ -5,23 +5,18 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 @Controller
 public class AddSubjectController {
-    @Autowired
-    private EntityManager em;
-
     @Autowired
     private UsersDAO users;
 
@@ -42,6 +37,7 @@ public class AddSubjectController {
     }
 
     @PostMapping(path = "/add-subject")
+    @Transactional
     public String postForm(
             @ModelAttribute(name = "subject") AddSubjectFormBean form,
             BindingResult bindingResult
@@ -74,17 +70,13 @@ public class AddSubjectController {
             return "add-subject";
         }
 
-        em.getTransaction().begin();
         try {
             Subject created = subjects.createSubject(engineer,
                     SubjKind.BUILDING,
                     form.getCadNumber(), form.getAddress());
 
             created.setTitle(form.getTitle());
-            em.getTransaction().commit();
         } catch (Throwable t) {
-            em.getTransaction().rollback();
-
             if (isConstraintViolation(t)) {
                 bindingResult.addError(new FieldError("subject", "cadNumber",
                         "Объект с таким кадастровым номером уже существует."));

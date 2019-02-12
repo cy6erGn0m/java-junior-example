@@ -3,6 +3,9 @@ package com.levelp.example;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -16,16 +19,12 @@ import javax.persistence.Persistence;
 
 @Configuration
 @EnableWebMvc
+@EnableTransactionManagement
 @ComponentScan(basePackages = "com.levelp.example")
 public class ApplicationConfiguration extends WebMvcConfigurerAdapter {
     @Bean
     public EntityManagerFactory createEntityManagerFactory() {
         return Persistence.createEntityManagerFactory("ProdPersistenceUnit");
-    }
-
-    @Bean
-    public EntityManager createEntityManager(EntityManagerFactory factory) {
-        return factory.createEntityManager();
     }
 
     @Bean

@@ -2,18 +2,17 @@ package com.levelp.example;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 @Service
 public class SubjectsDAO {
-    private final EntityManager em;
+    @PersistenceContext
+    private EntityManager em;
 
-    @Autowired
-    public SubjectsDAO(EntityManager em) {
-        this.em = em;
-    }
-
+    @Transactional
     public Subject createSubject(
             Engineer engineer,
             SubjKind kind,
