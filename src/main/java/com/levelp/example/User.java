@@ -1,6 +1,8 @@
 package com.levelp.example;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import static com.levelp.example.User.FIND_BY_LOGIN_QUERY;
 
@@ -19,6 +21,8 @@ public class User {
     private long id;
 
     @Column(nullable = false, unique = true)
+    @Size(min = 4, max = 50)
+    @Pattern(regexp = "[a-zA-Z0-9_-]+")
     private String login;
 
     public long getId() {

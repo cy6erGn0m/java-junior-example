@@ -21,6 +21,7 @@ public class SubjectsDAO {
         Subject subj = new Subject(cadNum, address);
         subj.setEngineer(engineer);
         subj.setKind(kind);
+        subj.setSquare(20);
         em.persist(subj);
         return subj;
     }

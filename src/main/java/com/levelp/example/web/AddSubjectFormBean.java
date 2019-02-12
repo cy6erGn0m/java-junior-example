@@ -1,6 +1,9 @@
 package com.levelp.example.web;
 
+import javax.validation.constraints.Pattern;
+
 public class AddSubjectFormBean {
+    @Pattern(regexp = "[0-9]+(:[0-9]+)+", message = "Неверный формат кадастрового номера.")
     private String cadNumber;
     private String title;
     private String address;

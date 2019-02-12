@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -39,9 +40,13 @@ public class AddSubjectController {
     @PostMapping(path = "/add-subject")
     @Transactional
     public String postForm(
-            @ModelAttribute(name = "subject") AddSubjectFormBean form,
+            @Valid @ModelAttribute(name = "subject") AddSubjectFormBean form,
             BindingResult bindingResult
     ) {
+        if (bindingResult.hasErrors()) {
+            return "add-subject";
+        }
+
         boolean verified = false;
 
         for (PassportVerificationService service : allVerificationServices) {

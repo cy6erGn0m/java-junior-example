@@ -1,6 +1,8 @@
 package com.levelp.example;
 
 import javax.persistence.*;
+import javax.validation.Constraint;
+import javax.validation.constraints.*;
 import java.util.Date;
 
 @Entity
@@ -37,7 +39,13 @@ public class Subject {
     private String address;
 
     @Column
+    @Max(10000000)
+    @Min(value = 1, message = "Слишком маленькая площадь.")
+    private int square;
+
+    @Column
     @Temporal(TemporalType.TIMESTAMP)
+    @Past
     private Date lastModificationTime;
 
     public Subject() {
@@ -102,5 +110,13 @@ public class Subject {
 
     public void setLastModificationTime(Date lastModificationTime) {
         this.lastModificationTime = lastModificationTime;
+    }
+
+    public int getSquare() {
+        return square;
+    }
+
+    public void setSquare(int square) {
+        this.square = square;
     }
 }
