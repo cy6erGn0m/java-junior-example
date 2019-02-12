@@ -3,12 +3,7 @@
 <html>
 <head>
     <title>Add subject</title>
-    <%--<link rel="stylesheet" type="text/css" href="/styles/main.css">--%>
-    <style type="text/css">
-        .error {
-            color: red;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="/static/styles/main.css">
 </head>
 <body>
     <form:form method="post"
