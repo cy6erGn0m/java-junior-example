@@ -31,13 +31,13 @@ public class AddSubjectController {
     @Qualifier("police")
     private PassportVerificationService policeVerificationService;
 
-    @GetMapping(path = "/add-subject")
+    @GetMapping(path = "/engineer/add-subject")
 //    = @RequestMapping(method = RequestMethod.GET, path = "/add-subject")
     public String addSubjectForm(@ModelAttribute(name = "subject") AddSubjectFormBean form) {
         return "add-subject";
     }
 
-    @PostMapping(path = "/add-subject")
+    @PostMapping(path = "/engineer/add-subject")
     @Transactional
     public String postForm(
             @Valid @ModelAttribute(name = "subject") AddSubjectFormBean form,

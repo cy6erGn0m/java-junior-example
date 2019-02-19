@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <html>
 <head>
     <title>Add subject</title>
@@ -7,7 +8,7 @@
 </head>
 <body>
     <form:form method="post"
-            action="/add-subject"
+            action="/engineer/add-subject"
             enctype="application/x-www-form-urlencoded"
             modelAttribute="subject"
     >
@@ -53,6 +54,7 @@
         </p>
 
         <form:errors cssClass="error" />
+        <security:csrfInput/>
     </form:form>
 </body>
 </html>

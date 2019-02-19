@@ -25,6 +25,9 @@ public class User {
     @Pattern(regexp = "[a-zA-Z0-9_-]+")
     private String login;
 
+    @Column
+    private String encryptedPassword;
+
     public long getId() {
         return id;
     }
@@ -39,6 +42,14 @@ public class User {
 
     public void setLogin(String login) {
         this.login = login;
+    }
+
+    public String getEncryptedPassword() {
+        return encryptedPassword;
+    }
+
+    public void setEncryptedPassword(String encryptedPassword) {
+        this.encryptedPassword = encryptedPassword;
     }
 
     @Override

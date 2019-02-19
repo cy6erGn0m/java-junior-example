@@ -1,12 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <jsp:useBean id="bean" type="com.levelp.example.web.AddUserPageBean" scope="request" />
 <html>
 <head>
     <title>Adding user</title>
 </head>
 <body>
-<form action="add-user" method="post">
+<form action="/admin/add-user" method="post">
     <p>
         <label>
             Kind:
@@ -33,6 +34,8 @@
     <p>
         <input type="submit">
     </p>
+
+    <security:csrfInput/>
 </form>
 </body>
 </html>

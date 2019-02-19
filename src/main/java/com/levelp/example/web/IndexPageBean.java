@@ -6,12 +6,14 @@ import java.util.Date;
 import java.util.List;
 
 public class IndexPageBean {
+    private final String currentUserName;
     private final Date currentDate;
     private final List<User> users;
 
-    public IndexPageBean(Date currentDate, List<User> users) {
+    public IndexPageBean(Date currentDate, List<User> users, String currentUserName) {
         this.currentDate = currentDate;
         this.users = users;
+        this.currentUserName = currentUserName;
     }
 
     public Date getCurrentDate() {
@@ -20,5 +22,9 @@ public class IndexPageBean {
 
     public List<User> getUsers() {
         return users;
+    }
+
+    public String getCurrentUserName() {
+        return currentUserName;
     }
 }
