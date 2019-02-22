@@ -18,8 +18,11 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.servlet.Filter;
 import java.util.Objects;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -36,9 +39,15 @@ public class IndexControllerTest {
 
     private MockMvc mockMvc;
 
+    @Autowired
+    private Filter securityFilter;
+
     @Before
     public void configure() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(context)
+                .addFilter(securityFilter)
+                .apply(springSecurity())
+                .build();
     }
 
     @Test
@@ -48,28 +57,57 @@ public class IndexControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("bean"))
-                .andExpect(model().attribute("bean", new BaseMatcher<IndexPageBean>() {
-                    @Override
-                    public void describeTo(Description description) {
-                        description.appendText("index page bean");
-                    }
+                .andExpect(model().attribute("bean",
+                        new IndexPageBeanBaseMatcher("")))
+                .andReturn();
+    }
 
-                    @Override
-                    public boolean matches(Object o) {
-                        if (!(o instanceof IndexPageBean)) return false;
-                        IndexPageBean bean = (IndexPageBean) o;
+    @Test
+    public void indexPageTestWithUser() throws Exception {
+        users.createUser("engineer", "user1");
 
-                        if (bean.getCurrentDate() == null) return false;
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/").
+                        with(user("user1").roles("ADMIN"))
+        )
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("bean"))
+                .andExpect(model().attribute("bean",
+                        new IndexPageBeanBaseMatcher("user1")))
+                .andReturn();
+    }
 
-                        if (bean.getUsers() == null) return false;
-                        if (bean.getUsers().stream().noneMatch(user ->
-                                Objects.equals(user.getLogin(), "user1")
-                        )) {
-                            return false;
-                        }
+    private static class IndexPageBeanBaseMatcher extends BaseMatcher<IndexPageBean> {
+        private final String expectedUserName;
 
-                        return true;
-                    }
-                })).andReturn();
+        private IndexPageBeanBaseMatcher(String expectedUserName) {
+            this.expectedUserName = expectedUserName;
+        }
+
+        @Override
+        public void describeTo(Description description) {
+            description.appendText("index page bean");
+        }
+
+        @Override
+        public boolean matches(Object o) {
+            if (!(o instanceof IndexPageBean)) return false;
+            IndexPageBean bean = (IndexPageBean) o;
+
+            if (bean.getCurrentDate() == null) return false;
+
+            if (bean.getUsers() == null) return false;
+            if (bean.getUsers().stream().noneMatch(user ->
+                    Objects.equals(user.getLogin(), "user1")
+            )) {
+                return false;
+            }
+
+            if (!expectedUserName.equals(bean.getCurrentUserName())) {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.levep.example;
 
 import com.levelp.example.ApplicationConfiguration;
+import com.levelp.example.SecurityConfiguration;
 import org.springframework.context.annotation.*;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.test.web.servlet.setup.MockMvcConfigurerAdapter;
@@ -18,6 +19,6 @@ import javax.persistence.Persistence;
                 classes = ApplicationConfiguration.class)
 )
 @EnableWebMvc
-@Import(TestDataConfiguration.class)
+@Import({TestDataConfiguration.class, SecurityConfiguration.class})
 public class TestWebConfiguration extends MockMvcConfigurerAdapter {
 }
