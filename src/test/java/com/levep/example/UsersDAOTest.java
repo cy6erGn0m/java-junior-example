@@ -3,23 +3,24 @@ package com.levep.example;
 import com.levelp.example.Engineer;
 import com.levelp.example.User;
 import com.levelp.example.UsersDAO;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TestConfiguration.class)
+@ContextConfiguration(classes = TestDataConfiguration.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class UsersDAOTest {
-    @Autowired
+    @PersistenceContext
     private EntityManager em;
 
     @Autowired
@@ -27,9 +28,7 @@ public class UsersDAOTest {
 
     @Test
     public void testCreateEngineer() {
-        em.getTransaction().begin();
         Engineer engineer = dao.createEngineer("engineer1");
-        em.getTransaction().commit();
 
         assertNotEquals(0L, engineer.getId());
         assertEquals("engineer1", engineer.getLogin());
@@ -43,22 +42,5 @@ public class UsersDAOTest {
         if (!(foundByLogin instanceof Engineer)) {
             fail("Expected an instance of Engineer but " + foundByLogin.getClass().getSimpleName() + " found");
         }
-    }
-
-    @Test
-    @Ignore
-    public void refreshRemoved() {
-        em.getTransaction().begin();
-        Engineer engineer = dao.createEngineer("engineer1");
-        em.getTransaction().commit();
-
-        em.getTransaction().begin();
-        em.remove(engineer);
-//        em.persist(engineer);
-        em.getTransaction().commit();
-
-        em.getTransaction().begin();
-        em.persist(engineer);
-        em.getTransaction().commit();
     }
 }
