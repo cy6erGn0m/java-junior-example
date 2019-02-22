@@ -17,12 +17,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf();
+        http.csrf().ignoringAntMatchers("/api/**");
+
         http.authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/engineer/**").hasRole("ENGINEER")
                 .antMatchers("/", "/static/**", "/login", "/signin").permitAll()
-                .antMatchers("/test/test").authenticated();
+                .antMatchers("/test/test").authenticated()
+                .antMatchers("/api/users").hasRole("ADMIN")
+                .antMatchers("/subjects").hasRole("ADMIN");
 
         http.formLogin()
                 .loginPage("/signin")

@@ -4,6 +4,8 @@ import com.levelp.example.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -48,6 +50,11 @@ public class SubjectsDAOTest {
         System.out.println(foundSubjects);
 
         assertTrue(foundPage.get().anyMatch(e -> e.getId() == subject.getId()));
+
+        Subject findBy = new Subject();
+        findBy.setEngineer(engineer);
+
+//        subjects.findAll(Example.of(findBy, ExampleMatcher.matching()...));
     }
 
     @Test

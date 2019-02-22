@@ -1,5 +1,7 @@
 package com.levelp.example;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -14,6 +16,7 @@ public class Engineer extends User {
 //            joinColumns = @JoinColumn(name = "engineer_fk", referencedColumnName = "id"),
 //            inverseJoinColumns = @JoinColumn(name = "subject_fk", referencedColumnName = "id")
 //    )
+    @JsonIgnore
     private List<Subject> subjects;
 
     public Engineer() {
