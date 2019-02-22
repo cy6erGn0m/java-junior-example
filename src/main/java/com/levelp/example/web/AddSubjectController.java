@@ -76,11 +76,12 @@ public class AddSubjectController {
         }
 
         try {
-            Subject created = subjects.createSubject(engineer,
-                    SubjKind.BUILDING,
-                    form.getCadNumber(), form.getAddress());
-
+            Subject created = new Subject(form.getCadNumber(), form.getAddress());
             created.setTitle(form.getTitle());
+            created.setKind(SubjKind.BUILDING);
+            created.setSquare(1);
+            created.setEngineer(engineer);
+            subjects.save(created);
         } catch (Throwable t) {
             if (isConstraintViolation(t)) {
                 bindingResult.addError(new FieldError("subject", "cadNumber",

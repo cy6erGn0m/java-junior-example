@@ -10,7 +10,7 @@
 
     <properties>
         <junit.version>4.12</junit.version>
-        <spring.version>4.3.9.RELEASE</spring.version>
+        <spring.version>5.1.5.RELEASE</spring.version>
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -101,6 +101,19 @@
             <version>4.2.3.RELEASE</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-jpa -->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
+            <version>2.1.5.RELEASE</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-rest-webmvc -->
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.data</groupId>-->
+            <!--<artifactId>spring-data-rest-webmvc</artifactId>-->
+            <!--<version>3.1.5.RELEASE</version>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>junit</groupId>

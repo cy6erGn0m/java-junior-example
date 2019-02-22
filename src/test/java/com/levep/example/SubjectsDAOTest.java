@@ -4,23 +4,26 @@ import com.levelp.example.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static java.util.Collections.singletonList;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TestWebConfiguration.class)
+@ContextConfiguration(classes = TestDataConfiguration.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class SubjectsDAOTest {
-    @Autowired
-    private EntityManager em;
-
     @Autowired
     private UsersDAO users;
 
@@ -29,25 +32,35 @@ public class SubjectsDAOTest {
 
     @Test
     public void testCreateSubj() {
-        em.getTransaction().begin();
-
         Engineer engineer = users.createEngineer("e2");
-        Subject subject = subjects.createSubject(engineer, SubjKind.BUILDING, "78:0001:0001", "addr1");
+        Subject subject = new Subject("78:0001:0001", "addr1");
+        subject.setKind(SubjKind.BUILDING);
+        subject.setEngineer(engineer);
+        subject.setSquare(1);
 
-        em.getTransaction().commit();
+        subjects.save(subject);
+
+        Page<Subject> foundPage =
+                subjects.findByEngineer_IdAndSquareGreaterThanEqualOrderBySquare(engineer.getId(), 1,
+                        PageRequest.of(0, 10));
+
+        List<Subject> foundSubjects = foundPage.get().collect(Collectors.toList());
+        System.out.println(foundSubjects);
+
+        assertTrue(foundPage.get().anyMatch(e -> e.getId() == subject.getId()));
     }
 
     @Test
     public void testFindEngineersSubjs() {
-        em.getTransaction().begin();
-
         Engineer engineer = users.createEngineer("e3");
-        Subject subject = subjects.createSubject(engineer, SubjKind.BUILDING, "79:0001:0001", "addr2");
-        engineer.setSubjects(Arrays.asList(subject));
 
-        em.getTransaction().commit();
+        Subject subject = new Subject("78:0001:0001", "addr2");
+        subject.setKind(SubjKind.BUILDING);
+        subject.setEngineer(engineer);
+        subject.setSquare(1);
 
-        em.refresh(engineer);
+        subjects.save(subject);
+        engineer.setSubjects(singletonList(subject));
 
         List<Subject> found = engineer.getSubjects();
         System.out.println(found);

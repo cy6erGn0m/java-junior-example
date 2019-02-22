@@ -1,28 +1,25 @@
 package com.levelp.example;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import java.util.List;
 
-@Service
-public class SubjectsDAO {
-    @PersistenceContext
-    private EntityManager em;
+@Repository
+@Transactional
+public interface SubjectsDAO extends JpaRepository<Subject, Long> {
+    Subject findSubjectByCadNum(String cadNum);
 
-    @Transactional
-    public Subject createSubject(
-            Engineer engineer,
-            SubjKind kind,
-            String cadNum,
-            String address) {
-        Subject subj = new Subject(cadNum, address);
-        subj.setEngineer(engineer);
-        subj.setKind(kind);
-        subj.setSquare(20);
-        em.persist(subj);
-        return subj;
-    }
+    Page<Subject> findByEngineer_IdAndSquareGreaterThanEqualOrderBySquare(
+            long engineerId,
+            int square,
+            Pageable pageable
+    );
+
+    @Query("from Subject where kind = :kind")
+    List<Subject> findSubjectsByKind(SubjKind kind);
 }
